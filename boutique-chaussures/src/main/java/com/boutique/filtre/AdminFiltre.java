@@ -1,0 +1,34 @@
+package com.boutique.filtre;
+
+import com.boutique.modele.Utilisateur;
+
+import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+
+/** Protege toutes les routes /admin/* : reserve aux utilisateurs de role ADMIN. */
+@WebFilter("/admin/*")
+public class AdminFiltre implements Filter {
+
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
+            throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) resp;
+        HttpSession session = request.getSession(false);
+        Utilisateur utilisateur = session != null ? (Utilisateur) session.getAttribute("utilisateur") : null;
+
+        if (utilisateur == null) {
+            response.sendRedirect(request.getContextPath() + "/connexion");
+            return;
+        }
+        if (!utilisateur.isAdmin()) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Acces reserve a l'administrateur.");
+            return;
+        }
+        chain.doFilter(req, resp);
+    }
+}

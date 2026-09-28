@@ -1,0 +1,8 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="titrePage" value="Page introuvable" scope="request"/>
+<%@ include file="commun/entete.jsp" %>
+<h1>404 &mdash; Page introuvable</h1>
+<p>La page que vous cherchez n'existe pas ou a ete deplacee.</p>
+<a class="bouton" href="${pageContext.request.contextPath}/accueil">Retour a l'accueil</a>
+<%@ include file="commun/pied.jsp" %>
